@@ -1,0 +1,16 @@
+html,
+body {
+  height: 100%;
+  text-align: center;
+}
+
+.mainLayout {
+  height: 100vh;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 10% 85% 5%;
+}
+
+main {
+  overflow: scroll;
+}
