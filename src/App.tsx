@@ -120,8 +120,8 @@ function App() {
         </Box>
       ) : (
         <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-          {countriesData.map((country, index) => (
-            <Card key={index} sx={{ width: 300, margin: 2 }}>
+          {countriesData.map((country) => (
+            <Card key={country.name.common} sx={{ width: 300, margin: 2 }}>
               <CardContent>
                 <Box sx={{ border: "2px solid" }}>
                   <CardMedia
