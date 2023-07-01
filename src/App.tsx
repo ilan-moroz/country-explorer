@@ -54,26 +54,28 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // onSubmit function
-  const onSubmit = async (data: any) => {
+  const onSubmit = (data: any) => {
     setLoading(true);
-    try {
-      await axios.get(`${baseUrl}/${data.country}`).then((response) => {
+    axios
+      .get(`${baseUrl}/${data.country}`)
+      .then((response) => {
         setCountriesData(response.data);
         setErrorMessage(""); // Clear the error when request is successful
+      })
+      .catch((err: any) => {
+        // if country is not found show snackbar error message else set api error
+        if (err.response && err.response.status === 404) {
+          setErrorMessage("Country not found! Please try again.");
+        } else {
+          setErrorMessage("An error occurred while fetching the country data.");
+        }
+        setCountriesData([]); //clear the countries displayed on error
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        reset();
       });
-    } catch (err: any) {
-      // if country is not found show snackbar error message else set api error
-      if (err.response && err.response.status === 404) {
-        setErrorMessage("Country not found! Please try again.");
-      } else {
-        setErrorMessage("An error occurred while fetching the country data.");
-      }
-      setCountriesData([]); //clear the countries displayed on error
-      console.log(err);
-    } finally {
-      setLoading(false);
-      reset();
-    }
   };
 
   return (
