@@ -45,7 +45,7 @@ function App() {
 
   // for snackbar error message
   const [open, setOpen] = useState(false);
-  const handleClick = () => {
+  const countryNotFound = () => {
     setOpen(true);
   };
   const handleClose = (
@@ -75,7 +75,7 @@ function App() {
       });
     } catch (err) {
       // if country is not found show snackbar error message
-      handleClick();
+      countryNotFound();
       setCountriesData([]);
       console.log(err);
     } finally {
