@@ -43,28 +43,16 @@ function App() {
     formState: { errors },
   } = useForm();
 
-  // for snackbar error message
-  const [open, setOpen] = useState(false);
-  const countryNotFound = () => {
-    setOpen(true);
-  };
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
-
   // api
-  const api = "https://restcountries.com/v3.1/name/";
+  const api = "https://restcountries.com/v3.1/name";
 
   const [countriesData, setCountriesData] = useState<Country[]>([]);
 
   // State for loading
   const [loading, setLoading] = useState<boolean>(false);
+
+  // State for error message
+  const [errorMessage, setErrorMessage] = useState("");
 
   // onSubmit function
   const onSubmit = async (data: any) => {
@@ -72,11 +60,16 @@ function App() {
     try {
       await axios.get(`${api}/${data.country}`).then((response) => {
         setCountriesData(response.data);
+        setErrorMessage(""); // Clear the error when request is successful
       });
-    } catch (err) {
-      // if country is not found show snackbar error message
-      countryNotFound();
-      setCountriesData([]);
+    } catch (err: any) {
+      // if country is not found show snackbar error message else set api error
+      if (err.response && err.response.status === 404) {
+        setErrorMessage("Country not found! Please try again.");
+      } else {
+        setErrorMessage("An error occurred while fetching the country data.");
+      }
+      setCountriesData([]); //clear the countries displayed on error
       console.log(err);
     } finally {
       setLoading(false);
@@ -111,13 +104,13 @@ function App() {
         </Box>
       </Box>
       <Snackbar
-        open={open}
+        open={errorMessage !== ""}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={() => setErrorMessage("")}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleClose} severity="error">
-          Country not found! Please try again
+        <Alert onClose={() => setErrorMessage("")} severity="error">
+          {errorMessage}
         </Alert>
       </Snackbar>
       {loading ? (
