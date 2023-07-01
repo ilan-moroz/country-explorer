@@ -44,7 +44,7 @@ function App() {
   } = useForm();
 
   // api
-  const api = "https://restcountries.com/v3.1/name";
+  const baseUrl = "https://restcountries.com/v3.1/name";
 
   const [countriesData, setCountriesData] = useState<Country[]>([]);
 
@@ -58,7 +58,7 @@ function App() {
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      await axios.get(`${api}/${data.country}`).then((response) => {
+      await axios.get(`${baseUrl}/${data.country}`).then((response) => {
         setCountriesData(response.data);
         setErrorMessage(""); // Clear the error when request is successful
       });
