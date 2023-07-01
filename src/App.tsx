@@ -61,6 +61,7 @@ function App() {
       .then((response) => {
         setCountriesData(response.data);
         setErrorMessage(""); // Clear the error when request is successful
+        reset();
       })
       .catch((err: any) => {
         // if country is not found show snackbar error message else set api error
@@ -74,7 +75,6 @@ function App() {
       })
       .finally(() => {
         setLoading(false);
-        reset();
       });
   };
 
