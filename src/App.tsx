@@ -7,7 +7,6 @@ import LanguageIcon from "@mui/icons-material/Language";
 import {
   Button,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   Typography,
@@ -73,8 +72,8 @@ function App() {
       console.log(err);
     } finally {
       setLoading(false);
+      reset();
     }
-    reset();
   };
 
   return (
@@ -121,7 +120,7 @@ function App() {
         <Box sx={{ display: "flex", flexWrap: "wrap" }}>
           {countriesData.map((country, index) => (
             <Card key={index} sx={{ width: 300, margin: 2 }}>
-              <CardActionArea>
+              <CardContent>
                 <Box sx={{ border: "2px solid" }}>
                   <CardMedia
                     component="img"
@@ -150,7 +149,7 @@ function App() {
                     {country.startOfWeek}
                   </Typography>
                 </CardContent>
-              </CardActionArea>
+              </CardContent>
             </Card>
           ))}
         </Box>
