@@ -16,22 +16,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-
-//interface for what data we will use
-interface Country {
-  name: {
-    common: string;
-  };
-  flags: {
-    png: string;
-  };
-  capital: string;
-  population: number;
-  languages: {
-    [key: string]: string;
-  };
-  startOfWeek: string;
-}
+import { Country } from "./types/Country";
 
 function App() {
   // useForm
