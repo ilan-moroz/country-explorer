@@ -16,6 +16,7 @@ import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 //interface for what data we will use
 interface Country {
@@ -62,8 +63,12 @@ function App() {
 
   const [countriesData, setCountriesData] = useState<Country[]>([]);
 
+  // State for loading
+  const [loading, setLoading] = useState<boolean>(false);
+
   // onSubmit function
   const onSubmit = async (data: any) => {
+    setLoading(true);
     try {
       await axios.get(`${api}/${data.country}`).then((response) => {
         setCountriesData(response.data);
@@ -71,7 +76,10 @@ function App() {
     } catch (err) {
       // if country is not found show snackbar error message
       handleClick();
+      setCountriesData([]);
       console.log(err);
+    } finally {
+      setLoading(false);
     }
     reset();
   };
@@ -112,42 +120,48 @@ function App() {
           Country not found! Please try again
         </Alert>
       </Snackbar>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {countriesData.map((country, index) => (
-          <Card key={index} sx={{ width: 300, margin: 2 }}>
-            <CardActionArea>
-              <Box sx={{ border: "2px solid" }}>
-                <CardMedia
-                  component="img"
-                  height="150"
-                  image={country.flags.png}
-                  alt={country.name.common}
-                />
-              </Box>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {country.name.common}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  <b>Capital : </b>
-                  {country.capital}
-                  <br />
-                  <b>Population : </b>
-                  {country.population.toLocaleString()}
-                  <br />
-                  <b>Languages : </b>
-                  {country.languages
-                    ? Object.values(country.languages).join(", ")
-                    : ""}
-                  <br />
-                  <b>Start of week : </b>
-                  {country.startOfWeek}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
-      </Box>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          {countriesData.map((country, index) => (
+            <Card key={index} sx={{ width: 300, margin: 2 }}>
+              <CardActionArea>
+                <Box sx={{ border: "2px solid" }}>
+                  <CardMedia
+                    component="img"
+                    height="150"
+                    image={country.flags.png}
+                    alt={country.name.common}
+                  />
+                </Box>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {country.name.common}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    <b>Capital : </b>
+                    {country.capital}
+                    <br />
+                    <b>Population : </b>
+                    {country.population.toLocaleString()}
+                    <br />
+                    <b>Languages : </b>
+                    {country.languages
+                      ? Object.values(country.languages).join(", ")
+                      : ""}
+                    <br />
+                    <b>Start of week : </b>
+                    {country.startOfWeek}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))}
+        </Box>
+      )}
     </div>
   );
 }
